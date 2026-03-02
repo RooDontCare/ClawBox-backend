@@ -118,6 +118,59 @@ npm start
 }
 ```
 
+## 测试
+
+部署完成后，可以使用以下命令测试服务是否正常运行：
+
+### 健康检查
+
+```bash
+curl http://localhost:3000/health
+```
+
+外网访问（替换 IP 为你的服务器地址）：
+```bash
+curl http://81.71.85.198:3000/health
+```
+
+预期响应：
+```json
+{"status":"ok","timestamp":"2026-03-02T03:04:20.846Z"}
+```
+
+### LLM 接口测试
+
+测试 LLM API 是否正常工作：
+```bash
+curl -s -X POST http://localhost:3000/api/llm \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"你好，请用一句话介绍一下自己","history":[],"model":"glm-4-flash"}'
+```
+
+外网访问（替换 IP）：
+```bash
+curl -s -X POST http://81.71.85.198:3000/api/llm \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"你好，请用一句话介绍一下自己","history":[],"model":"glm-4-flash"}'
+```
+
+预期响应：
+```json
+{"content":"你好，我是一个致力于提供智能问答和丰富知识服务的AI助手。","finishReason":"stop"}
+```
+
+### 查看服务日志
+
+使用 systemd 时：
+```bash
+sudo journalctl -u llm-game-backend -f
+```
+
+查看服务状态：
+```bash
+sudo systemctl status llm-game-backend
+```
+
 ## 部署
 
 部署到您的自有服务器：
